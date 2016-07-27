@@ -1,7 +1,6 @@
 development:
   adapter: postgresql
   database: office_dj
-  host: localhost
 test:
   adapter: postgresql
   database: office_dj_test
