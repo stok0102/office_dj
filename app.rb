@@ -2,7 +2,6 @@ require("bundler/setup")
 Bundler.require(:default)
 require 'warden'
 require 'rspotify'
-require './config/enviroments'
 
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each { |file| require file }
 

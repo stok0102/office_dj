@@ -80,6 +80,25 @@
         </ul>
         <%end%>
       </div>
+      <div class="well up-next">
+        <h3>Voting Pool:</h3>
+          <% if @playlist %>
+          <ul>
+            <% @playlist.each do |song| %>
+            <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %>
+
+            <form class="voting" action="/song/song.id/downvote" method="post">
+              <button class="btn-danger" type="button" name="button"><span class="glyphicon glyphicon-volume-down"></span></button>
+            </form>
+            <form class="voting" action="/song/song.id/upvote" method="post">
+              <button class="btn-primary" type="button" name="button"><span class="glyphicon glyphicon-volume-up"></span></button>
+            </form></li>
+            <% end %>
+          </ul>
+          <% else %>
+          <p>There are no songs in the queue.</p>
+          <% end %>
+      </div>
     </div>
     <div class="col-sm-5 col well">
       <div class="thumbnail">
@@ -99,18 +118,16 @@
         <% end %>
       </div>
       <div class="well up-next">
-        <h3>Up Next:</h3>
+        <h3>Playlist:</h3>
           <% if @playlist %>
           <ul>
             <% @playlist.each do |song| %>
+            <% RSpotify.authenticate("61e71b2d2d504c6483535caa51c055b6", "4b8975a6516644b49359399b2cd30d23")
+               playlist = RSpotify::Playlist.find('stok0102', '1ZStRQRmHMNo7awMwtCIeI')
+               if song.spin_score > 3
+               playlist.add_tracks!(Library.find(song.library_id).uri, position: 0) %>
             <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %>
-
-            <form class="voting" action="/song/song.id/downvote" method="post">
-              <button class="btn-danger" type="button" name="button"><span class="glyphicon glyphicon-volume-down"></span></button>
-            </form>
-            <form class="voting" action="/song/song.id/upvote" method="post">
-              <button class="btn-primary" type="button" name="button"><span class="glyphicon glyphicon-volume-up"></span></button>
-            </form></li>
+            </li>
             <% end %>
           </ul>
           <% else %>
