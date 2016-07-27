@@ -1,6 +1,6 @@
 require 'spec_helper.rb'
 
-describe 'User' do
+describe User, type: :model do
   describe "#username" do
     it "will return the username for a user" do
       test_user = User.new(:username => "djrock", :password => "12345")
@@ -23,4 +23,6 @@ describe 'User' do
       expect(test_user.id).to(be_an_instance_of(Fixnum))
     end
   end
+
+  it { should have_and_belong_to_many(:songs) }
 end
