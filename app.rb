@@ -1,7 +1,6 @@
 require("bundler/setup")
 Bundler.require(:default)
 require 'warden'
-require 'pry'
 require 'rspotify'
 require './config/enviroments'
 
