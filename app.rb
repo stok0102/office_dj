@@ -70,8 +70,10 @@ end
     @songs = Library.last(10)
     @playlist = Song.where(created_at: Time.now.midnight..(Time.now.midnight + 1.day))
     @now_playing = @playlist[0]
-    @current_song = Library.find(@now_playing.library_id).uri
-    @current_song.slice! "spotify:track:"
+    if @playlist.length > 0
+      @current_song = Library.find(@now_playing.library_id).uri
+      @current_song.slice! "spotify:track:"
+    end
     @djs = Dj.all
     erb(:main)
   end

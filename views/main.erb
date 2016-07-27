@@ -133,7 +133,7 @@
                if song.spin_score > 3
                playlist.add_tracks!(Library.find(song.library_id).uri, position: 0) %>
             <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %>
-
+              <% end %>
               <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/downvote" method="post">
                 <input type="hidden" name="_method" value="patch">
                 <button class="btn-danger" type="submit" name="button"><span class="glyphicon glyphicon-volume-down"></span></button>
