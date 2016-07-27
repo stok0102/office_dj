@@ -1,7 +1,6 @@
 require("bundler/setup")
 Bundler.require(:default)
 require 'warden'
-require 'pry'
 require 'rspotify'
 
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each { |file| require file }
@@ -73,19 +72,14 @@ end
     @user = User.get(params.fetch("id").to_i)
     @dj = Dj.find_by(user_id: @user.id)
     @songs = Library.last(10)
-    @playlist = Song.all
+    @playlist = Song.where(created_at: Time.now.midnight..(Time.now.midnight + 1.day))
     @now_playing = @playlist[0]
-    @users = User.all
+    @current_song = Library.find(@now_playing.library_id).uri
+    @current_song.slice! "spotify:track:"
+    @djs = Dj.all
     @role = Role.find(@dj.role_id.to_i)
     erb(:main)
   end
-
-  # get '/main' do
-  #   @playlist = Song.all
-  #   @tracks
-  #   @songs = Library.last(10)
-  #   erb :main
-  # end
 
   post '/song' do
     @tracks = RSpotify::Track.search(params.fetch 'name', limit: 10, market: 'US')
@@ -94,14 +88,17 @@ end
       album = track.album.name
       popularity = track.popularity
       pic = track.album.images[0].fetch("url")
-      Library.create({name: track.name, artist: artist, popularity: popularity, album: album, image: pic})
+      duration = track.duration_ms.to_i
+      uri = track.uri
+      Library.create({name: track.name, artist: artist, popularity: popularity, album: album, image: pic, duration: duration, uri: uri})
     end
     redirect "/users/#{env['warden'].user.id}"
   end
 
   post '/song/:id' do
-
-    Song.create({library_id: params.fetch('libraryId'), dj_id: params.fetch('id')})
+    dj = Dj.find params['id']
+    dj.request
+    Song.create({library_id: params.fetch('libraryId'), dj_id: params.fetch('id'), spin_score: 0})
     redirect "/users/#{env['warden'].user.id}"
   end
 
@@ -115,7 +112,7 @@ end
     password = params.fetch("new_password")
     role_id = params.fetch("role_select").to_i
     @user = User.first_or_create({:username => username, :password => password})
-    dj = Dj.create({name: @user.username, user_id: @user.id, role_id: role_id})
+    dj = Dj.create({name: @user.username, user_id: @user.id, requests: 4, vetos: 1, djscore: 0, role_id: role_id})
     @songs = Library.last(10)
     redirect "/"
   end
@@ -127,6 +124,25 @@ end
   get '/logout' do
     env['warden'].logout
     redirect '/'
+  end
+
+  patch '/song/:song_id/:user_id/downvote' do
+    song = Song.find params['song_id']
+    dj = Dj.find_by(user_id: params['user.id'])
+    song.vote(-1)
+    song.djs.push(dj)
+    dj.score(-1)
+    binding.pry
+    redirect "/users/#{env['warden'].user.id}"
+  end
+
+  patch '/song/:song_id/:user_id/upvote' do
+    song = Song.find params['song_id']
+    dj = Dj.find_by(user_id: params['user.id'])
+    song.vote(1)
+    song.djs.push(dj)
+    dj.score(1)
+    redirect "/users/#{env['warden'].user.id}"
   end
 
 

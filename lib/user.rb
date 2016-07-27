@@ -15,7 +15,6 @@ class User < ActiveRecord::Base
   property :password, BCryptHash, :length => 1..100
 
 
-  has_and_belongs_to_many :songs
   has_many :djs
 
   def authenticate(attempted_password)

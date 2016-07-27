@@ -7,6 +7,21 @@ Can't get your team to agree on music? <br><br> Crowdsource your playlist with O
 Ruby on Sinatra app <br>
 RSpotify gem for Spotify API
 
+### User stories
+
+* User can search spotify for tracks
+
+* User can add song to local playlist
+
+* User can vote on songs in the local playlist
+
+* Embedded Spotify player plays the playlist
+
+* Admin has spotify player
+
+
+
+
 ### Contributing
 
 1. Fork
