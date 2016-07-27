@@ -24,5 +24,4 @@ describe User, type: :model do
     end
   end
 
-  it { should have_and_belong_to_many(:songs) }
 end

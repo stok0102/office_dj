@@ -1,7 +1,7 @@
 require 'spec_helper.rb'
 
 describe Song, type: :model do
-  it { should have_and_belong_to_many(:users) }
+  it { should have_and_belong_to_many(:djs) }
   describe '#vote' do
     it "change spin_score" do
       test_song = Song.create({spin_score: 0})
