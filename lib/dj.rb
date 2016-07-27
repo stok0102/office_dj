@@ -1,6 +1,8 @@
 class Dj < ActiveRecord::Base
-  has_and_belongs_to_many :songs
 
+  has_and_belongs_to_many :songs
+  belongs_to :role
+  
   def request
     requests = self.requests - 1
     self.update({requests: requests})
@@ -10,4 +12,5 @@ class Dj < ActiveRecord::Base
     score = self.djscore + value
     self.update({djscore: score})
   end
+
 end

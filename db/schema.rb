@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 20160727224600) do
 
   # These are extensions that must be enabled in order to support this database
@@ -23,6 +24,7 @@ ActiveRecord::Schema.define(version: 20160727224600) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer "role_id"
   end
 
   create_table "djs_songs", force: :cascade do |t|
@@ -38,6 +40,10 @@ ActiveRecord::Schema.define(version: 20160727224600) do
     t.string  "image"
     t.integer "duration"
     t.string  "uri"
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.string "name"
   end
 
   create_table "songs", force: :cascade do |t|

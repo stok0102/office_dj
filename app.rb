@@ -60,6 +60,10 @@ end
     erb :index
   end
 
+  get "/team" do
+    erb(:team)
+  end
+
 
   get '/users/:id' do
     unless env['warden'].authenticated?
@@ -75,6 +79,7 @@ end
       @current_song.slice! "spotify:track:"
     end
     @djs = Dj.all
+    @role = Role.find(@dj.role_id.to_i)
     erb(:main)
   end
 
@@ -100,14 +105,16 @@ end
   end
 
   get '/signup' do
+    @roles = Role.all
     erb :signup_form
   end
 
   post '/users/new' do
     username = params.fetch("new_username")
     password = params.fetch("new_password")
+    role_id = params.fetch("role_select").to_i
     @user = User.first_or_create({:username => username, :password => password})
-    dj = Dj.create({name: @user.username, user_id: @user.id, requests: 4, vetos: 1, djscore: 0})
+    dj = Dj.create({name: @user.username, user_id: @user.id, requests: 4, vetos: 1, djscore: 0, role_id: role_id})
     @songs = Library.last(10)
     redirect "/"
   end
