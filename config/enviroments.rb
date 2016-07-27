@@ -6,7 +6,7 @@ end
 
 configure :production do
   db = URI.parse(ENV['DATABASE_URL']) || 'postgres://Guest:guest@localhost/office_dj'
-  DataMapper.setup(:default, ENV['HEROKU_POSTGRESQL_RED_URL'])
+  DataMapper.setup(:default, postgres://beqzhngopcynlb:nrO8fplff0cogw902OwWTjjlaF@ec2-107-22-250-212.compute-1.amazonaws.com:5432/d2u8973r0optsj)
 
   ActiveRecord::Base.establish_connection(
     :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
