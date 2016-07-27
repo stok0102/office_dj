@@ -72,6 +72,7 @@ end
     @playlist = Song.all
     @now_playing = @playlist[0]
     @users = User.all
+    @current_song = Library.find(@now_playing.library_id).uri
     # @dj = DJ.find_by({user_id: @user.id})
     erb(:main)
   end
@@ -90,7 +91,9 @@ end
       album = track.album.name
       popularity = track.popularity
       pic = track.album.images[0].fetch("url")
-      Library.create({name: track.name, artist: artist, popularity: popularity, album: album, image: pic})
+      duration = track.duration_ms.to_i
+      uri = track.uri
+      Library.create({name: track.name, artist: artist, popularity: popularity, album: album, image: pic, duration: duration, uri: uri})
     end
     redirect "/users/#{env['warden'].user.id}"
   end
