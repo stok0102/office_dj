@@ -80,23 +80,8 @@
         </ul>
         <%end%>
       </div>
-    </div>
-    <div class="col-sm-5 col well">
-      <div class="thumbnail">
-        <h3>Now Playing: DJ <%=@user.username%></h3>
-        <% if @playlist.length > 0 && @songs.length > 0 %>
-          <img src="<%= Library.find(@now_playing.library_id).image %>" alt="album" width="400" height="300">
-        <% else %>
-          <img src="/img/logo.png" alt="album" width="400" height="300">
-        <% end %>
-        <p><strong>Celine Dion</strong></p>
-        <p>My Heart Will Go On</p>
-        <div class='embed-container'>
-          <iframe src='https://embed.spotify.com/?uri=spotify:track:24lMtPOCzP5g4hrg3NklLa' frameborder='0' allowtransparency='true'></iframe>
-        </div>
-      </div>
       <div class="well up-next">
-        <h3>Up Next:</h3>
+        <h3>Voting Pool:</h3>
           <% if @playlist %>
           <ul>
             <% @playlist.each do |song| %>
@@ -108,6 +93,38 @@
             <form class="voting" action="/song/song.id/upvote" method="post">
               <button class="btn-primary" type="button" name="button"><span class="glyphicon glyphicon-volume-up"></span></button>
             </form></li>
+            <% end %>
+          </ul>
+          <% else %>
+          <p>There are no songs in the queue.</p>
+          <% end %>
+      </div>
+    </div>
+    <div class="col-sm-5 col well">
+      <div class="thumbnail">
+        <h3>Now Playing: DJ <%=@user.username%></h3>
+        <% if @playlist.length > 0 && @songs.length > 0 %>
+          <img src="<%= Library.find(@now_playing.library_id).image %>" alt="album" width="400" height="300">
+          <p><strong><%= Library.find(@now_playing.library_id).artist %></strong></p>
+          <p><%= Library.find(@now_playing.library_id).name %></p>
+        <% else %>
+          <img src="/img/logo.png" alt="album" width="400" height="300">
+        <% end %>
+        <% if @playlist.length > 0 && @songs.length > 0 %>
+        <div class='embed-container'>
+          <iframe src="https://embed.spotify.com/?uri=spotify:user:stok0102:playlist:1ZStRQRmHMNo7awMwtCIeI&theme=white" frameborder="0" allowtransparency="true"></iframe>
+        </div>
+        <% else %>
+        <% end %>
+      </div>
+      <div class="well up-next">
+        <h3>Playlist:</h3>
+          <% if @playlist %>
+          <ul>
+            <% @playlist.each do |song| %>
+
+            <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %>
+            </li>
             <% end %>
           </ul>
           <% else %>
