@@ -2,6 +2,7 @@ require("bundler/setup")
 Bundler.require(:default)
 require 'warden'
 require 'rspotify'
+require 'pry'
 
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each { |file| require file }
 
@@ -130,7 +131,7 @@ end
 
   patch '/song/:song_id/:user_id/downvote' do
     song = Song.find params['song_id']
-    dj = Dj.find_by(user_id: params['user.id'])
+    dj = Dj.find_by(user_id: params['user_id'])
     song.vote(-1)
     song.djs.push(dj)
     dj.score(-1)
@@ -140,7 +141,7 @@ end
 
   patch '/song/:song_id/:user_id/upvote' do
     song = Song.find params['song_id']
-    dj = Dj.find_by(user_id: params['user.id'])
+    dj = Dj.find_by(user_id: params['user_id'])
     song.vote(1)
     song.djs.push(dj)
     dj.score(1)
