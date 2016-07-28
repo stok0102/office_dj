@@ -2,7 +2,9 @@ require("bundler/setup")
 Bundler.require(:default)
 require 'warden'
 require 'rspotify'
+require './config/environments'
 require 'pry'
+
 
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each { |file| require file }
 
@@ -80,7 +82,7 @@ end
       @current_song.slice! "spotify:track:"
     end
     @djs = Dj.all
-    @role = Role.find(@dj.role_id.to_i)
+    @role = Role.find(@dj.role_id.to_i).name
     erb(:main)
   end
 
