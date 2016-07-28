@@ -80,7 +80,7 @@ end
       @current_song.slice! "spotify:track:"
     end
     @djs = Dj.all
-    @role = Role.find(@dj.role_id.to_i)
+    @role = Role.find(@dj.role_id.to_i).name
     erb(:main)
   end
 

@@ -117,9 +117,13 @@
         <p><strong>Celine Dion</strong></p>
         <p>My Heart Will Go On</p>
         <% if @playlist.length > 0 && @songs.length > 0 %>
-        <div class='embed-container'>
-          <iframe src="https://embed.spotify.com/?uri=<%=@current_song%>" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
-        </div>
+          <% if @role == 'Administrator'%>
+            <div class='embed-container'>
+              <iframe src="https://embed.spotify.com/?uri=<%=@current_song%>" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+            </div>
+          <% else %>
+            <h5>Team Members do not have access to the player</h5>
+          <% end %>
         <% else %>
         <% end %>
       </div>
