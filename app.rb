@@ -71,6 +71,9 @@ end
     end
     @user = User.get(params.fetch("id").to_i)
     @dj = Dj.find_by(user_id: @user.id)
+    if @dj.updated_at < Time.now.midnight
+      @dj.reset
+    end
     @songs = Library.last(10)
     @playlist = Song.where(created_at: Time.now.midnight..(Time.now.midnight + 1.day))
     @now_playing = @playlist[0]
