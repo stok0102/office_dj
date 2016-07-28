@@ -17,22 +17,14 @@
       <div class="well">
         <p><%=@user.username%></p>
         <img src="/img/photo.jpeg" class="img-circle" height="65" width="65" alt="Avatar">
-      </div>
-      <div class="well">
-        <p>Level 9</p>
+        <p>
+          <br>
+          Level <%= 1 + (@dj.djscore / 4) %>
+        </p>
         <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width:80%">
-            80%
+          <div class="progress-bar" role="progressbar" style="width:<%= (@dj.djscore % 4) * 25 %>%">
           </div>
         </div>
-        <p>
-          <span class="label label-default">News</span>
-          <span class="label label-primary">W3Schools</span>
-          <span class="label label-success">Labels</span>
-          <span class="label label-info">Football</span>
-          <span class="label label-warning">Gaming</span>
-          <span class="label label-danger">Friends</span>
-        </p>
       </div>
       <div class="well top-votes">
         <p><strong>Top Upvotes</strong></p>
@@ -43,6 +35,16 @@
           <li>Chaka Khan - I'm Every Woman</li>
           <li>Enya - Only Time</li>
         </ul>
+      </div>
+      <div class="well team-channel">
+        <h3>Team Channel</h3>
+        <% if @djs.any? %>
+        <ul>
+          <% @djs.each do |dj|%>
+          <li><%= dj.name%> - Level <%= 1 + (dj.djscore / 4) %></li>
+          <%end%>
+        </ul>
+        <%end%>
       </div>
     </div>
     <div class="col-sm-5 col well">
@@ -74,16 +76,6 @@
       <% else %>
         <h3>You have run out of requests</h3>
       <% end %>
-      <div class="well team-channel">
-        <h3>Team Channel</h3>
-        <% if @djs.any? %>
-          <ul>
-            <% @djs.each do |user|%>
-            <li>@<%= user.name%> - Level 10</li>
-          <%end%>
-        </ul>
-        <%end%>
-      </div>
       <div class="well up-next">
         <h3>Voting Pool:</h3>
           <% if @playlist %>

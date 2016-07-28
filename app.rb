@@ -133,19 +133,21 @@ end
 
   patch '/song/:song_id/:user_id/downvote' do
     song = Song.find params['song_id']
-    dj = Dj.find_by(user_id: params['user_id'])
+    song_dj = Dj.find(song.dj_id)
+    user_dj = Dj.find_by(user_id: params['user_id'])
     song.vote(-1)
-    song.djs.push(dj)
-    dj.score(-1)
+    song.djs.push(user_dj)
+    song_dj.score(-1)
     redirect "/users/#{env['warden'].user.id}"
   end
 
   patch '/song/:song_id/:user_id/upvote' do
     song = Song.find params['song_id']
-    dj = Dj.find_by(user_id: params['user_id'])
+    song_dj = Dj.find(song.dj_id)
+    user_dj = Dj.find_by(user_id: params['user_id'])
     song.vote(1)
-    song.djs.push(dj)
-    dj.score(1)
+    song.djs.push(user_dj)
+    song_dj.score(1)
     redirect "/users/#{env['warden'].user.id}"
   end
 
