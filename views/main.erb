@@ -85,11 +85,17 @@
             <% if song.djs.exclude?(@dj) %>
               <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/downvote" method="post">
                 <input type="hidden" name="_method" value="patch">
-                <button class="btn-danger" type="submit" name="button"><span class="glyphicon glyphicon-volume-down"></span></button>
+                <button class="btn-warning" type="submit" name="button"><span class="glyphicon glyphicon-volume-down"></span></button>
               </form>
               <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/upvote" method="post">
                 <input type="hidden" name="_method" value="patch">
                 <button class="btn-primary" type="submit" name="button"><span class="glyphicon glyphicon-volume-up"></span></button>
+              </form>
+            <% end %>
+            <% if @dj.vetos != 0 %>
+              <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/veto" method="post">
+                <input type="hidden" name="_method" value="delete">
+                <button class="btn-danger" type="submit" name="button"><span class="glyphicon glyphicon-volume-off"></span></button>
               </form>
             <% end %>
             </li>

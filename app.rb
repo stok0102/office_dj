@@ -119,7 +119,6 @@ end
       @alert.push("New User Created")
       dj = Dj.create({name: @user.username, user_id: @user.id, requests: 4, vetos: 1, djscore: 0, role_id: role_id})
       @songs = Library.last(10)
-      binding.pry
       erb :index
     else
       @user.errors.each do |e|
@@ -155,6 +154,15 @@ end
     song.vote(1)
     song.djs.push(user_dj)
     song_dj.score(1)
+    redirect "/users/#{env['warden'].user.id}"
+  end
+
+  delete '/song/:song_id/:user_id/veto' do
+    song = Song.find params['song_id']
+    song.destroy
+    user_dj = Dj.find_by(user_id: params['user_id'])
+    binding.pry
+    user_dj.veto
     redirect "/users/#{env['warden'].user.id}"
   end
 

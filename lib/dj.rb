@@ -9,9 +9,16 @@ class Dj < ActiveRecord::Base
     self.update({requests: requests})
   end
 
+  def veto
+    self.update({vetos: 0})
+  end
+
   def score (value)
     score = self.djscore + value
     self.update({djscore: score})
   end
 
+  def reset
+    self.update({requests: 4, vetos: 1})
+  end
 end
