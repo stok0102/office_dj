@@ -89,14 +89,16 @@
           <% if @playlist %>
           <ul>
             <% @playlist.each do |song| %>
-            <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %>
-
-            <form class="voting" action="/song/song.id/downvote" method="post">
-              <button class="btn-danger" type="button" name="button"><span class="glyphicon glyphicon-volume-down"></span></button>
-            </form>
-            <form class="voting" action="/song/song.id/upvote" method="post">
-              <button class="btn-primary" type="button" name="button"><span class="glyphicon glyphicon-volume-up"></span></button>
-            </form></li>
+            <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %> - Votes: <%= song.spin_score %>
+              <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/downvote" method="post">
+                <input type="hidden" name="_method" value="patch">
+                <button class="btn-danger" type="submit" name="button"><span class="glyphicon glyphicon-volume-down"></span></button>
+              </form>
+              <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/upvote" method="post">
+                <input type="hidden" name="_method" value="patch">
+                <button class="btn-primary" type="submit" name="button"><span class="glyphicon glyphicon-volume-up"></span></button>
+              </form>
+            </li>
             <% end %>
           </ul>
           <% else %>
@@ -114,8 +116,6 @@
         <% else %>
           <img src="/img/logo.png" alt="album" width="400" height="300">
         <% end %>
-        <p><strong>Celine Dion</strong></p>
-        <p>My Heart Will Go On</p>
         <% if @playlist.length > 0 && @songs.length > 0 %>
           <% if @role == 'Administrator'%>
             <div class='embed-container'>
@@ -138,14 +138,7 @@
                playlist.add_tracks!(Library.find(song.library_id).uri, position: 0) %>
             <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %>
               <% end %>
-              <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/downvote" method="post">
-                <input type="hidden" name="_method" value="patch">
-                <button class="btn-danger" type="submit" name="button"><span class="glyphicon glyphicon-volume-down"></span></button>
-              </form>
-              <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/upvote" method="post">
-                <input type="hidden" name="_method" value="patch">
-                <button class="btn-primary" type="submit" name="button"><span class="glyphicon glyphicon-volume-up"></span></button>
-              </form></li>
+              </li>
             <% end %>
           </ul>
           <% else %>
