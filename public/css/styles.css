@@ -15,7 +15,7 @@
   background-repeat: no-repeat;
   color: hotpink;
   font-family: myneon;
-  font-size: 2em;
+  font-size: 2.7em;
 }
 
 .login a {
@@ -24,6 +24,15 @@
 
 .login h1 {
   font-size: 3em;
+}
+
+.login input {
+  color: black;
+  font-family: sans-serif;
+}
+
+.login button {
+  font-family: sans-serif;
 }
 
 @font-face {
