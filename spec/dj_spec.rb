@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Dj, type: :model do
     it { should have_and_belong_to_many(:songs) }
+    it { should validate_length_of({ in: 3..50 })}
   describe '#request' do
     it "subtracts requests by 1" do
       test_dj = Dj.create({name: 'tst', requests: 4})

@@ -150,6 +150,11 @@ end
     redirect "/users/#{env['warden'].user.id}"
   end
 
+  get '/auth/spotify/callback/' do
+    binding.pry
+    redirect "/users/#{env['warden'].user.id}"
+  end
+
 
 class FailureApp < Sinatra::Application
   post '/unauthenticated' do

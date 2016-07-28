@@ -4,6 +4,8 @@ require 'dm-postgres-adapter'
 require 'bcrypt'
 require 'dm-validations'
 
+DataMapper.setup(:default, 'postgres://Guest:guest@localhost/office_dj')
+
 class User < ActiveRecord::Base
   include DataMapper::Resource
   include BCrypt
