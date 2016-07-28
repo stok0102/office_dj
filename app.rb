@@ -165,13 +165,7 @@ end
     song = Song.find params['song_id']
     song.destroy
     user_dj = Dj.find_by(user_id: params['user_id'])
-    binding.pry
     user_dj.veto
-    redirect "/users/#{env['warden'].user.id}"
-  end
-
-  get '/auth/spotify/callback/' do
-    binding.pry
     redirect "/users/#{env['warden'].user.id}"
   end
 
