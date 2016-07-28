@@ -1,12 +1,12 @@
 configure :development do
- set :database, 'postgres://Guest:guest@localhost/office_dj'
+ set :database, 'postgres://briangrant:Kod%40chrome3@localhost/office_dj'
  set :show_exceptions, true
 
- DataMapper.setup(:default, 'postgres://Guest:guest@localhost/office_dj')
+ DataMapper.setup(:default, 'postgres://briangrant:Kod%40chrome3@localhost/office_dj')
 end
 
 configure :production do
- db = URI.parse(ENV['DATABASE_URL'] || 'postgres://Guest:guest@localhost/office_dj')
+ db = URI.parse(ENV['DATABASE_URL'] || 'postgres://postgres://briangrant:Kod%40chrome3@localhost/office_dj')
 
  DataMapper.setup(:default, db)
 
