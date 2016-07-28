@@ -137,7 +137,6 @@ end
     song.vote(-1)
     song.djs.push(dj)
     dj.score(-1)
-    binding.pry
     redirect "/users/#{env['warden'].user.id}"
   end
 

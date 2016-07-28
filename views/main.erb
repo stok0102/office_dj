@@ -132,11 +132,11 @@
           <% if @playlist %>
           <ul>
             <% @playlist.each do |song| %>
-            <% RSpotify.authenticate("61e71b2d2d504c6483535caa51c055b6", "4b8975a6516644b49359399b2cd30d23")
-               playlist = RSpotify::Playlist.find('stok0102', '1ZStRQRmHMNo7awMwtCIeI')
-               if song.spin_score > 10
-               playlist.add_tracks!(Library.find(song.library_id).uri, position: 0) %>
-            <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %>
+              #  RSpotify.authenticate("61e71b2d2d504c6483535caa51c055b6", "4b8975a6516644b49359399b2cd30d23")
+              #  playlist = RSpotify::Playlist.find('stok0102', '1ZStRQRmHMNo7awMwtCIeI')
+              # playlist.add_tracks!(Library.find(song.library_id).uri, position: 0) %>
+               <% if song.spin_score > 10 %>
+              <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %>
               <% end %>
               </li>
             <% end %>
