@@ -144,7 +144,6 @@ end
     song.vote(-1)
     song.djs.push(dj)
     dj.score(-1)
-    binding.pry
     redirect "/users/#{env['warden'].user.id}"
   end
 
@@ -154,6 +153,11 @@ end
     song.vote(1)
     song.djs.push(dj)
     dj.score(1)
+    redirect "/users/#{env['warden'].user.id}"
+  end
+
+  get '/auth/spotify/callback/' do
+    binding.pry
     redirect "/users/#{env['warden'].user.id}"
   end
 
