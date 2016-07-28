@@ -90,6 +90,7 @@
           <ul>
             <% @playlist.each do |song| %>
             <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %> - Votes: <%= song.spin_score %>
+            <% if song.djs.exclude?(@dj) %>
               <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/downvote" method="post">
                 <input type="hidden" name="_method" value="patch">
                 <button class="btn-danger" type="submit" name="button"><span class="glyphicon glyphicon-volume-down"></span></button>
@@ -98,6 +99,7 @@
                 <input type="hidden" name="_method" value="patch">
                 <button class="btn-primary" type="submit" name="button"><span class="glyphicon glyphicon-volume-up"></span></button>
               </form>
+            <% end %>
             </li>
             <% end %>
           </ul>
