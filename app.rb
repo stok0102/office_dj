@@ -152,9 +152,9 @@ end
   end
 
   get '/auth/spotify/callback/' do
-    hash = {"access_token":"BQCY-JgtBXbBKKXVRv_dltPeNhy6_G09_dnG3pX3jfIrBMX2JYVZUC4nx6yuZNiGbhn86xV74tO6Fhz67I4kY6eMYkmpxbHt_hdIKsrmzHBfaw1GatJmQfFAF8vXB1IZnO6tDFIXX8RCB9atrrT2su2qxj91P90JtCXPiV43AXmynvKj1qh5X2sK","token_type":"Bearer","expires_in":3600,"refresh_token":"AQCrZrm8Q06SDskVet698VtZsITN3byei2inHTH2U2td3BmMFANgN-_BmEuIHOBLBlXw0usMdxsL79yKjgg3UutI3K0ps92aJ34MVSvmpt3l062tTyM-V6BnbrXyDVeTDqE","scope":"playlist-modify-public"}
-    spotify_user = RSpotify::User.new(hash)
-
+    hash = {"access_token":"BQCbB9n8j-0EM60h2vN7UALaODWPlRKPkhOkUn_55et34xUwurCxPJZdZTLc6tuyiGEMSB-FSRuIlHiPGg4uQbFXwS_j6a0wC9AjlnkLn-Amyokh8pjnSo3AYjNtxb7fyZktjdTiM1t-AAVr8f1HC_Bf1454taqzoJ-WdX5ldcrxQZCOlGTkUnqfjFLxZM0v6Wk_bt_PbihPv2R0useEyewYWpxeih3O0N_9YeTVpRpvlQSvBhv3ZXTcBBeQaL8XzVibug6LHVZ5","token_type":"Bearer","expires_in":3600,"refresh_token":"AQAm8-jZUQwVws86XyYtuTBVIAEWh3g1MA55cLDiMJExi4iIY-2GckloTTcmQB7nxG-cMDFi6nqrvwTIUBb8PPEYMUCK41_VcQTyROVQy-2ll7kcm7hvb0Q79Tcvhx8FRLY","scope":"playlist-read-private playlist-modify-private playlist-modify-public user-read-birthdate user-read-email user-read-private"}
+    binding.pry
+    spotify_user = RSpotify::User.new(hash.fetch("access_token"))
     redirect "/users/#{env['warden'].user.id}"
   end
 
