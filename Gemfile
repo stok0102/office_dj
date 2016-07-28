@@ -12,6 +12,7 @@ gem 'sinatra-flash', require: 'sinatra/flash'
 gem 'warden'
 gem 'shotgun'
 gem 'rspotify'
+gem 'omniauth'
 
 group(:test) do
   gem 'rspec'

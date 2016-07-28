@@ -4,6 +4,8 @@ require 'warden'
 require 'rspotify'
 require './config/environments'
 require 'pry'
+require 'omniauth'
+require 'omniauth-oauth2'
 
 
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each { |file| require file }
@@ -149,6 +151,22 @@ end
     redirect "/users/#{env['warden'].user.id}"
   end
 
+  get '/auth/spotify/callback/' do
+    hash = {"access_token":"BQCY-JgtBXbBKKXVRv_dltPeNhy6_G09_dnG3pX3jfIrBMX2JYVZUC4nx6yuZNiGbhn86xV74tO6Fhz67I4kY6eMYkmpxbHt_hdIKsrmzHBfaw1GatJmQfFAF8vXB1IZnO6tDFIXX8RCB9atrrT2su2qxj91P90JtCXPiV43AXmynvKj1qh5X2sK","token_type":"Bearer","expires_in":3600,"refresh_token":"AQCrZrm8Q06SDskVet698VtZsITN3byei2inHTH2U2td3BmMFANgN-_BmEuIHOBLBlXw0usMdxsL79yKjgg3UutI3K0ps92aJ34MVSvmpt3l062tTyM-V6BnbrXyDVeTDqE","scope":"playlist-modify-public"}
+    spotify_user = RSpotify::User.new(hash)
+
+    redirect "/users/#{env['warden'].user.id}"
+  end
+
+  # post '/auth/spotify/callback/' do
+  #   url = https://accounts.spotify.com/api/token
+  #   code = params.fetch("code")
+  #   redirect_uri = http%3A%2F%2Flocalhost%3A4567%2Fauth%2Fspotify%2Fcallback%2F
+  #   grant_type = 'authorization_code'
+  #   client_id = 61e71b2d2d504c6483535caa51c055b6
+  #   client_secret = 4b8975a6516644b49359399b2cd30d23
+  #   binding.pry
+  # end
 
 class FailureApp < Sinatra::Application
   post '/unauthenticated' do

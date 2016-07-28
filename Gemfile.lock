@@ -186,6 +186,7 @@ DEPENDENCIES
   capybara
   data_mapper
   dm-postgres-adapter
+  omniauth
   pg
   pry
   rake
