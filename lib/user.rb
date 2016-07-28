@@ -11,10 +11,7 @@ class User < ActiveRecord::Base
   include BCrypt
 
   property :id, Serial, :key => true
-  property :username, String, :unique => true, :length => 3..50, :messages => {
-    :is_unique => "Username already exists.",
-    :length => "Username required to be between 3 and 50 characters."
-  }
+  property :username, String, :unique => true, :length => 3..50
   property :password, BCryptHash, :length => 1..100
 
   validates_with_method :case_insensitive

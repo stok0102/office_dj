@@ -4,11 +4,13 @@ require 'warden'
 require 'rspotify'
 require './config/environments'
 require 'pry'
+require 'sinatra/flash'
 
 
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each { |file| require file }
 
-use Rack::Session::Cookie, :secret => "WookieFoot"
+enable :sessions
+register Sinatra::Flash
 
 use Warden::Manager do |manager|
   manager.default_strategies :password
@@ -59,14 +61,9 @@ end
     end
   end
 
-  post '/unauthenticated' do
-    erb :index
-  end
-
-  get "/team" do
-    erb(:team)
-  end
-
+  # post '/unauthenticated' do
+  #   erb :index
+  # end
 
   get '/users/:id' do
     unless env['warden'].authenticated?
@@ -116,10 +113,20 @@ end
     username = params.fetch("new_username")
     password = params.fetch("new_password")
     role_id = params.fetch("role_select").to_i
-    @user = User.first_or_create({:username => username, :password => password})
-    dj = Dj.create({name: @user.username, user_id: @user.id, requests: 4, vetos: 1, djscore: 0, role_id: role_id})
-    @songs = Library.last(10)
-    redirect "/"
+    @user = User.new({:username => username, :password => password})
+    @alert = []
+    if @user.save
+      @alert.push("New User Created")
+      dj = Dj.create({name: @user.username, user_id: @user.id, requests: 4, vetos: 1, djscore: 0, role_id: role_id})
+      @songs = Library.last(10)
+      binding.pry
+      erb :index
+    else
+      @user.errors.each do |e|
+        @alert.push(e.first)
+      end
+      erb :index
+    end
   end
 
   get '/login' do
@@ -159,6 +166,7 @@ end
 
 class FailureApp < Sinatra::Application
   post '/unauthenticated' do
-    erb :failed
+    @alert = ['Username and/or password incorrect!']
+    erb :index
   end
 end
