@@ -17,6 +17,11 @@ class User < ActiveRecord::Base
   }
   property :password, BCryptHash, :length => 1..100
 
+  validates_with_method :case_insensitive
+
+  def case_insensitive
+    User.first(conditions: ["username ILIKE ?", self.username]).nil?
+  end
 
   has_many :djs
 
