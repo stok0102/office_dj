@@ -28,13 +28,14 @@
       </div>
       <div class="well top-votes">
         <p><strong>Top Upvotes</strong></p>
-        <ul>
-          <li>TLC - No Scrubs</li>
-          <li>Britney Spears - Stronger</li>
-          <li>Katy Perry - Firework</li>
-          <li>Chaka Khan - I'm Every Woman</li>
-          <li>Enya - Only Time</li>
-        </ul>
+          <% if @top_songs %>
+            <ul>
+              <% @top_songs.each do |song| %>
+                <li><%= Library.find(song.library_id).name %> - Votes: <%= song.spin_score %></li>
+              <% end %>
+          </ul>
+          <% else %>
+        <% end %>
       </div>
       <div class="well team-channel">
         <h3>Team Channel</h3>

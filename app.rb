@@ -81,6 +81,7 @@ end
       @current_song = Library.find(@now_playing.library_id).uri
       @current_song.slice! "spotify:track:"
     end
+    @top_songs = Song.where(dj_id: @dj.id).order( 'spin_score DESC')
     @djs = Dj.all
     @role = Role.find(@dj.role_id.to_i).name
     erb(:main)
