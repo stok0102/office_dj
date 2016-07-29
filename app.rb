@@ -77,11 +77,12 @@ end
       @dj.reset
     end
     @songs = Library.last(10)
-    @playlist = Song.where(created_at: Time.now.midnight..(Time.now.midnight + 1.day))
+    @vote_list = Song.where(created_at: Time.now.midnight..(Time.now.midnight + 1.day))
+    @playlist = @vote_list.where('spin_score > ?', 4)
     @now_playing = @playlist[0]
     if @playlist.length > 0
       @current_song = Library.find(@now_playing.library_id).uri
-      @current_song.slice! "spotify:track:"
+      # @current_song.slice! "spotify:track:"
     end
     @top_songs = Song.where(dj_id: @dj.id).order( 'spin_score DESC')
     @djs = Dj.all

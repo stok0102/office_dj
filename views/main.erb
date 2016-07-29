@@ -80,9 +80,9 @@
       <% end %>
       <div class="well up-next">
         <h3>Voting Pool:</h3>
-          <% if @playlist %>
+          <% if @vote_list %>
           <ul>
-            <% @playlist.each do |song| %>
+            <% @vote_list.each do |song| %>
             <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %> - Votes: <%= song.spin_score %>
             <% if song.djs.exclude?(@dj) %>
               <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/downvote" method="post">
@@ -118,7 +118,7 @@
         <% else %>
           <img src="/img/logo.png" alt="album" width="400" height="300">
         <% end %>
-        <% if @playlist.length > 0 && @songs.length > 0 %>
+        <% if @vote_list.length > 0 && @songs.length > 0 %>
           <% if @role == 'Administrator'%>
             <div class='embed-container'>
               <iframe src="https://embed.spotify.com/?uri=<%=@current_song%>" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
@@ -131,16 +131,14 @@
       </div>
       <div class="well up-next">
         <h3>Playlist:</h3>
-          <% if @playlist %>
+          <% if @playlist.length > 0 %>
           <ul>
             <% @playlist.each do |song| %>
-            <% if song.spin_score > 4 %>
                  <!-- RSpotify.authenticate("61e71b2d2d504c6483535caa51c055b6", "4b8975a6516644b49359399b2cd30d23")
                 playlist = RSpotify::Playlist.find('stok0102', '1ZStRQRmHMNo7awMwtCIeI')
                 binding.pry
                 playlist.add_tracks!([Library.find(song.library_id)], position: 0) %> -->
-              <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %>
-              <% end %>
+              <li><%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %>
               </li>
             <% end %>
           </ul>
