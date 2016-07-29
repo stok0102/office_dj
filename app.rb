@@ -4,7 +4,9 @@ require 'warden'
 require 'rspotify'
 require './config/environments'
 require 'pry'
-require 'sinatra/flash'
+# require 'omniauth'
+# require 'omniauth-oauth2'
+# require 'sinatra/flash'
 
 
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each { |file| require file }
@@ -169,6 +171,22 @@ end
     redirect "/users/#{env['warden'].user.id}"
   end
 
+  get '/auth/spotify/callback/' do
+    hash = {"access_token":"BQCbB9n8j-0EM60h2vN7UALaODWPlRKPkhOkUn_55et34xUwurCxPJZdZTLc6tuyiGEMSB-FSRuIlHiPGg4uQbFXwS_j6a0wC9AjlnkLn-Amyokh8pjnSo3AYjNtxb7fyZktjdTiM1t-AAVr8f1HC_Bf1454taqzoJ-WdX5ldcrxQZCOlGTkUnqfjFLxZM0v6Wk_bt_PbihPv2R0useEyewYWpxeih3O0N_9YeTVpRpvlQSvBhv3ZXTcBBeQaL8XzVibug6LHVZ5","token_type":"Bearer","expires_in":3600,"refresh_token":"AQAm8-jZUQwVws86XyYtuTBVIAEWh3g1MA55cLDiMJExi4iIY-2GckloTTcmQB7nxG-cMDFi6nqrvwTIUBb8PPEYMUCK41_VcQTyROVQy-2ll7kcm7hvb0Q79Tcvhx8FRLY","scope":"playlist-read-private playlist-modify-private playlist-modify-public user-read-birthdate user-read-email user-read-private"}
+    binding.pry
+    spotify_user = RSpotify::User.new(hash.fetch("access_token"))
+    redirect "/users/#{env['warden'].user.id}"
+  end
+
+  # post '/auth/spotify/callback/' do
+  #   url = https://accounts.spotify.com/api/token
+  #   code = params.fetch("code")
+  #   redirect_uri = http%3A%2F%2Flocalhost%3A4567%2Fauth%2Fspotify%2Fcallback%2F
+  #   grant_type = 'authorization_code'
+  #   client_id = 61e71b2d2d504c6483535caa51c055b6
+  #   client_secret = 4b8975a6516644b49359399b2cd30d23
+  #   binding.pry
+  # end
 
 class FailureApp < Sinatra::Application
   post '/unauthenticated' do
