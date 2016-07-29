@@ -30,7 +30,9 @@
           <% if @top_songs %>
             <ul>
               <% @top_songs.each do |song| %>
-                <li><%= Library.find(song.library_id).name %> - Votes: <%= song.spin_score %></li>
+
+                  <li><%= Library.find(song.library_id).name %> - Votes: <%= song.spin_score %></li>
+
               <% end %>
           </ul>
           <% else %>
@@ -81,7 +83,14 @@
           <% if @playlist %>
           <ul>
             <% @playlist.each do |song| %>
-            <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %> - Votes: <%= song.spin_score %>
+            <li>
+              <div class="ticker-wrap">
+                <div class="ticker">
+                  <div class="ticker__item">
+                    <%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %> - Votes: <%= song.spin_score %>
+                  </div>
+                </div>
+              </div>
             <% if song.djs.exclude?(@dj) %>
               <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/downvote" method="post">
                 <input type="hidden" name="_method" value="patch">
