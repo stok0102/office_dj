@@ -111,6 +111,12 @@ end
     redirect "/users/#{env['warden'].user.id}"
   end
 
+  delete '/song' do
+    song = Song.find(params.fetch("song_id"))
+    song.destroy
+    redirect "/users/#{env['warden'].user.id}"
+  end
+
   get '/signup' do
     @roles = Role.all
     erb :signup_form
