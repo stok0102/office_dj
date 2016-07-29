@@ -118,8 +118,8 @@
     </div>
     <div class="col-sm-4 col well">
       <div class="thumbnail">
-        <h3>Now Playing: DJ <%=@user.username%></h3>
         <% if @playlist.length > 0 && @songs.length > 0 %>
+          <h3>Now Playing: DJ <%= @now_playing_dj.name %></h3>
           <img src="<%= Library.find(@now_playing.library_id).image %>" alt="album" width="400" height="300">
           <p><strong><%= Library.find(@now_playing.library_id).artist %></strong></p>
           <p><%= Library.find(@now_playing.library_id).name %></p>

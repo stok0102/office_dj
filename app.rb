@@ -80,6 +80,7 @@ end
     @vote_list = Song.where(created_at: Time.now.midnight..(Time.now.midnight + 1.day))
     @playlist = @vote_list.where('spin_score > ?', 4)
     @now_playing = @playlist[0]
+    @now_playing_dj = Dj.find(@now_playing.dj_id)
     if @playlist.length > 0
       @current_song = Library.find(@now_playing.library_id).uri
       # @current_song.slice! "spotify:track:"
