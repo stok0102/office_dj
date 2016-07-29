@@ -2,7 +2,13 @@
   <div class="col-sm-4 col-sm-offset-8">
 
     <h1>Team DJ!</h1>
-
+    <% if @alert %>
+      <%if @alert != ["New User Created"] %>
+        <p id="error-message"><%= @alert.first%></p>
+      <% else %>
+        <p id="success-message"><%= @alert.first%></p>
+      <% end %>
+    <% end %>
     <form action="/user" method="post">
       <div class="form-group labels">
         <label for="name">Username:</label>

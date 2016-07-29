@@ -4,13 +4,15 @@ require 'warden'
 require 'rspotify'
 require './config/environments'
 require 'pry'
-require 'omniauth'
-require 'omniauth-oauth2'
+# require 'omniauth'
+# require 'omniauth-oauth2'
+# require 'sinatra/flash'
 
 
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each { |file| require file }
 
-use Rack::Session::Cookie, :secret => "WookieFoot"
+enable :sessions
+register Sinatra::Flash
 
 use Warden::Manager do |manager|
   manager.default_strategies :password
@@ -61,14 +63,9 @@ end
     end
   end
 
-  post '/unauthenticated' do
-    erb :index
-  end
-
-  get "/team" do
-    erb(:team)
-  end
-
+  # post '/unauthenticated' do
+  #   erb :index
+  # end
 
   get '/users/:id' do
     unless env['warden'].authenticated?
@@ -76,6 +73,9 @@ end
     end
     @user = User.get(params.fetch("id").to_i)
     @dj = Dj.find_by(user_id: @user.id)
+    if @dj.updated_at < Time.now.midnight
+      @dj.reset
+    end
     @songs = Library.last(10)
     @playlist = Song.where(created_at: Time.now.midnight..(Time.now.midnight + 1.day))
     @now_playing = @playlist[0]
@@ -83,6 +83,7 @@ end
       @current_song = Library.find(@now_playing.library_id).uri
       @current_song.slice! "spotify:track:"
     end
+    @top_songs = Song.where(dj_id: @dj.id).order( 'spin_score DESC')
     @djs = Dj.all
     @role = Role.find(@dj.role_id.to_i).name
     erb(:main)
@@ -118,10 +119,19 @@ end
     username = params.fetch("new_username")
     password = params.fetch("new_password")
     role_id = params.fetch("role_select").to_i
-    @user = User.first_or_create({:username => username, :password => password})
-    dj = Dj.create({name: @user.username, user_id: @user.id, requests: 4, vetos: 1, djscore: 0, role_id: role_id})
-    @songs = Library.last(10)
-    redirect "/"
+    @user = User.new({:username => username, :password => password})
+    @alert = []
+    if @user.save
+      @alert.push("New User Created")
+      dj = Dj.create({name: @user.username, user_id: @user.id, requests: 4, vetos: 1, djscore: 0, role_id: role_id})
+      @songs = Library.last(10)
+      erb :index
+    else
+      @user.errors.each do |e|
+        @alert.push(e.first)
+      end
+      erb :index
+    end
   end
 
   get '/login' do
@@ -135,19 +145,29 @@ end
 
   patch '/song/:song_id/:user_id/downvote' do
     song = Song.find params['song_id']
-    dj = Dj.find_by(user_id: params['user_id'])
+    song_dj = Dj.find(song.dj_id)
+    user_dj = Dj.find_by(user_id: params['user_id'])
     song.vote(-1)
-    song.djs.push(dj)
-    dj.score(-1)
+    song.djs.push(user_dj)
+    song_dj.score(-1)
     redirect "/users/#{env['warden'].user.id}"
   end
 
   patch '/song/:song_id/:user_id/upvote' do
     song = Song.find params['song_id']
-    dj = Dj.find_by(user_id: params['user_id'])
+    song_dj = Dj.find(song.dj_id)
+    user_dj = Dj.find_by(user_id: params['user_id'])
     song.vote(1)
-    song.djs.push(dj)
-    dj.score(1)
+    song.djs.push(user_dj)
+    song_dj.score(1)
+    redirect "/users/#{env['warden'].user.id}"
+  end
+
+  delete '/song/:song_id/:user_id/veto' do
+    song = Song.find params['song_id']
+    song.destroy
+    user_dj = Dj.find_by(user_id: params['user_id'])
+    user_dj.veto
     redirect "/users/#{env['warden'].user.id}"
   end
 
@@ -170,6 +190,7 @@ end
 
 class FailureApp < Sinatra::Application
   post '/unauthenticated' do
-    erb :failed
+    @alert = ['Username and/or password incorrect!']
+    erb :index
   end
 end

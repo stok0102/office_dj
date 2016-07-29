@@ -18,32 +18,35 @@
       <div class="well">
         <p><%=@user.username%></p>
         <img src="/img/photo.jpeg" class="img-circle" height="65" width="65" alt="Avatar">
-      </div>
-      <div class="well">
-        <p>Level 9</p>
+        <p>
+          <br>
+          Level <%= 1 + (@dj.djscore / 4) %>
+        </p>
         <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width:80%">
-            80%
+          <div class="progress-bar" role="progressbar" style="width:<%= (@dj.djscore % 4) * 25 %>%">
           </div>
         </div>
-        <p>
-          <span class="label label-default">News</span>
-          <span class="label label-primary">W3Schools</span>
-          <span class="label label-success">Labels</span>
-          <span class="label label-info">Football</span>
-          <span class="label label-warning">Gaming</span>
-          <span class="label label-danger">Friends</span>
-        </p>
       </div>
       <div class="well top-votes">
         <p><strong>Top Upvotes</strong></p>
+          <% if @top_songs %>
+            <ul>
+              <% @top_songs.each do |song| %>
+                <li><%= Library.find(song.library_id).name %> - Votes: <%= song.spin_score %></li>
+              <% end %>
+          </ul>
+          <% else %>
+        <% end %>
+      </div>
+      <div class="well team-channel">
+        <h3>Team Channel</h3>
+        <% if @djs.any? %>
         <ul>
-          <li>TLC - No Scrubs</li>
-          <li>Britney Spears - Stronger</li>
-          <li>Katy Perry - Firework</li>
-          <li>Chaka Khan - I'm Every Woman</li>
-          <li>Enya - Only Time</li>
+          <% @djs.each do |dj|%>
+          <li><%= dj.name%> - Level <%= 1 + (dj.djscore / 4) %></li>
+          <%end%>
         </ul>
+        <%end%>
       </div>
     </div>
     <div class="col-sm-5 col well">
@@ -75,30 +78,28 @@
       <% else %>
         <h3>You have run out of requests</h3>
       <% end %>
-      <div class="well team-channel">
-        <h3>Team Channel</h3>
-        <% if @djs.any? %>
-          <ul>
-            <% @djs.each do |user|%>
-            <li>@<%= user.name%> - Level 10</li>
-          <%end%>
-        </ul>
-        <%end%>
-      </div>
       <div class="well up-next">
         <h3>Voting Pool:</h3>
           <% if @playlist %>
           <ul>
             <% @playlist.each do |song| %>
             <li>@<%= Dj.find(song.dj_id).name%>: <%= Library.find(song.library_id).artist %> - <%= Library.find(song.library_id).name %> - Votes: <%= song.spin_score %>
+            <% if song.djs.exclude?(@dj) %>
               <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/downvote" method="post">
                 <input type="hidden" name="_method" value="patch">
-                <button class="btn-danger" type="submit" name="button"><span class="glyphicon glyphicon-volume-down"></span></button>
+                <button class="btn-warning" type="submit" name="button"><span class="glyphicon glyphicon-volume-down"></span></button>
               </form>
               <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/upvote" method="post">
                 <input type="hidden" name="_method" value="patch">
                 <button class="btn-primary" type="submit" name="button"><span class="glyphicon glyphicon-volume-up"></span></button>
               </form>
+            <% end %>
+            <% if @dj.vetos != 0 %>
+              <form class="voting" action="/song/<%= song.id %>/<%= @user.id %>/veto" method="post">
+                <input type="hidden" name="_method" value="delete">
+                <button class="btn-danger" type="submit" name="button"><span class="glyphicon glyphicon-volume-off"></span></button>
+              </form>
+            <% end %>
             </li>
             <% end %>
           </ul>
